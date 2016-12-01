@@ -13,7 +13,7 @@
 
 // ==/UserScript==
 
-var position = GM_getValue('position', 'mainMenu');
+var position = GM_getValue('position', 'userinfo');
 if(window.location.href.match('user.php\\?action=edit\&userid=')){
     var table = document.getElementById('site_appearance_settings');
     var lastRow = document.getElementById('site_tooltips_tr');
