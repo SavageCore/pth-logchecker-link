@@ -1,6 +1,6 @@
 // ==UserScript==
 
-// @name           passtheheadphones.me Logchecker Link
+// @name           passtheheadphones.me - Logchecker Link
 // @author         SavageCore
 // @namespace      https://savagecore.eu
 // @description    Inserts a logchecker.php link in main menu.
