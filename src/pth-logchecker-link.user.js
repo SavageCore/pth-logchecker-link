@@ -4,7 +4,7 @@
 // @author         SavageCore
 // @namespace      https://savagecore.eu
 // @description    Inserts a logchecker.php link in main menu.
-// @include        http*://*passtheheadphones.me/*
+// @include        http*://*redacted.ch/*
 // @version        0.1.7
 // @date           2016-11-29
 // @grant          GM_getValue
