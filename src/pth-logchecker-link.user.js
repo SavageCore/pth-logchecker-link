@@ -1,132 +1,127 @@
 // ==UserScript==
-
-// @name           PTH Logchecker Link
-// @author         SavageCore
-// @namespace      https://savagecore.eu
+// @name	         RED Logchecker Link
+// @author	       SavageCore
+// @namespace	     https://savagecore.eu
 // @description    Inserts a logchecker.php link in main menu.
 // @include        http*://*redacted.ch/*
 // @version        0.1.8
 // @date           2016-11-29
 // @grant          GM_getValue
 // @grant          GM_setValue
-// @downloadURL    https://github.com/SavageCore/pth-logchecker-link/raw/master/src/pth-logchecker-link.user.js
+// @grant          GM.getValue
+// @grant          GM.setValue
+// @require        https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
+// @downloadURL	   https://github.com/SavageCore/pth-logchecker-link/raw/master/src/pth-logchecker-link.user.js
+// ==/UserScript==
 
-/*	global document GM_getValue	GM_setValue window */
+/*	global document GM window */
 
 /* eslint new-cap: "off", no-redeclare: "off" */
 
-// ==/UserScript==
+(async function () {
+	const position = await GM.getValue('position', 'userinfo');
+	if (window.location.href.match('user.php\\?action=edit&userid=')) {
+		const lastRow = document.getElementById('site_tooltips_tr');
 
-var position = GM_getValue('position', 'userinfo');
-if (window.location.href.match('user.php\\?action=edit&userid=')) {
-	var lastRow = document.getElementById('site_tooltips_tr');
-
-	var tr = document.createElement('tr');
-	tr.id = 'pth_logchecker_tr';
-	var td = document.createElement('td');
-	td.className = 'label tooltip';
-	td.innerHTML = '<strong>Logchecker link location</strong>';
-	tr.appendChild(td);
-	var td2 = document.createElement('td');
-	tr.appendChild(td2);
-	var select = document.createElement('select');
-	select.name = 'pth_logchecker';
-	select.id = 'pth_logchecker';
-	td2.appendChild(select);
-	var menuOptions = {
-		0: {value: 'mainMenu', innerText: 'Main Menu'},
-		1: {value: 'userinfo', innerText: 'User Info'},
-		2: {value: 'userinfo_major', innerText: 'User Info Major'}
-	};
-	for (var key in menuOptions) {
-		if ({}.hasOwnProperty.call(menuOptions, key)) {
-			var optionElement = document.createElement('option');
-			optionElement.value = menuOptions[key].value;
-			optionElement.innerText = menuOptions[key].innerText;
-			select.appendChild(optionElement);
+		const tr = document.createElement('tr');
+		tr.id = 'red_logchecker_tr';
+		const td = document.createElement('td');
+		td.className = 'label tooltip';
+		td.innerHTML = '<strong>Logchecker link location</strong>';
+		tr.appendChild(td);
+		const td2 = document.createElement('td');
+		tr.appendChild(td2);
+		const select = document.createElement('select');
+		select.name = 'red_logchecker';
+		select.id = 'red_logchecker';
+		td2.appendChild(select);
+		const menuOptions = {
+			0: {value: 'mainMenu', innerText: 'Main Menu'},
+			1: {value: 'userinfo', innerText: 'User Info'},
+			2: {value: 'userinfo_major', innerText: 'User Info Major'}
+		};
+		for (const key in menuOptions) {
+			if ({}.hasOwnProperty.call(menuOptions, key)) {
+				const optionElement = document.createElement('option');
+				optionElement.value = menuOptions[key].value;
+				optionElement.innerText = menuOptions[key].innerText;
+				select.appendChild(optionElement);
+			}
 		}
+
+		lastRow.insertAdjacentElement('afterend', tr);
+
+		const selectElem = document.getElementById('red_logchecker');
+		for (let i = 0; i < selectElem.options.length; i++) {
+			if (selectElem.options[i].value === position) {
+				selectElem.options[i].selected = 'selected';
+			}
+		}
+		selectElem.onchange = function (e) {
+			switch (e.target.value) {
+				case 'mainMenu':
+					GM.setValue('position', 'mainMenu');
+					updateLink(document.getElementById('menu').children[1]);
+					break;
+				case 'userinfo':
+					GM.setValue('position', 'userinfo');
+					updateLink(document.getElementById('userinfo_minor'));
+					break;
+				case 'userinfo_major':
+					GM.setValue('position', 'userinfo_major');
+					updateLink(document.getElementById('userinfo_major'));
+					break;
+				default:
+					GM.setValue('position', 'mainMenu');
+					updateLink(document.getElementById('menu').children[1]);
+			}
+		};
 	}
 
-	lastRow.insertAdjacentElement('afterend', tr);
-
-	var select = document.getElementById('pth_logchecker');
-	for (var i = 0; i < select.options.length; i++) {
-		if (select.options[i].value === position) {
-			select.options[i].selected = 'selected';
-		}
+	switch (position) {
+		case 'mainMenu':
+			appendLink(document.getElementById('menu').children[1]);
+			break;
+		case 'userinfo':
+			appendLink(document.getElementById('userinfo_minor'));
+			break;
+		case 'userinfo_major':
+			appendLink(document.getElementById('userinfo_major'));
+			break;
+		default:
+			appendLink(document.getElementById('userinfo_minor'));
 	}
-	select.onchange = function (e) {
-		switch (e.target.value) {
-			case 'mainMenu':
-				GM_setValue('position', 'mainMenu');
-				var element = document.getElementById('menu').children[1];
-				updateLink(element);
-				break;
-			case 'userinfo':
-				GM_setValue('position', 'userinfo');
-				var element = document.getElementById('userinfo_minor');
-				updateLink(element);
-				break;
-			case 'userinfo_major':
-				GM_setValue('position', 'userinfo_major');
-				var element = document.getElementById('userinfo_major');
-				updateLink(element);
-				break;
-			default:
-				GM_setValue('position', 'mainMenu');
-				var element = document.getElementById('menu').children[1];
-				updateLink(element);
-		}
-	};
-}
 
-switch (position) {
-	case 'mainMenu':
-		var menu = document.getElementById('menu').children[1];
-		appendLink(menu);
-		break;
-	case 'userinfo':
-		var menu = document.getElementById('userinfo_minor');
-		appendLink(menu);
-		break;
-	case 'userinfo_major':
-		var menu = document.getElementById('userinfo_major');
-		appendLink(menu);
-		break;
-	default:
-		var menu = document.getElementById('userinfo_minor');
-		appendLink(menu);
-}
+	function appendLink(menu) {
+		const logcheckerA = createLink('Logchecker', 'logchecker.php');
+		const logcheckerLi = createLi('logchecker', logcheckerA);
+		menu.appendChild(logcheckerLi);
+	}
 
-function appendLink(menu) {
-	var logcheckerA = createLink('Logchecker', 'logchecker.php');
-	var logcheckerLi = createLi('logchecker', logcheckerA);
-	menu.appendChild(logcheckerLi);
-}
+	function createLi(x, y) {
+		const li = document.createElement('li');
+		li.id = 'nav_' + x;
+		li.appendChild(y);
+		return li;
+	}
 
-function createLi(x, y) {
-	var li = document.createElement('li');
-	li.id = 'nav_' + x;
-	li.appendChild(y);
-	return li;
-}
+	function createLink(x, y) {
+		const a = document.createElement('a');
 
-function createLink(x, y) {
-	var a = document.createElement('a');
+		a.innerHTML = x;
+		a.href = y;
+		return a;
+	}
 
-	a.innerHTML = x;
-	a.href = y;
-	return a;
-}
+	function removeLi() {
+		const element = document.getElementById('nav_logchecker');
+		element.parentNode.removeChild(element);
+	}
 
-function removeLi() {
-	var element = document.getElementById('nav_logchecker');
-	element.parentNode.removeChild(element);
-}
-
-function updateLink(element) {
-	removeLi();
-	var logchecker = createLink('Logchecker', 'logchecker.php');
-	var logcheckerLi = createLi('logchecker', logchecker);
-	element.appendChild(logcheckerLi);
-}
+	function updateLink(element) {
+		removeLi();
+		const logchecker = createLink('Logchecker', 'logchecker.php');
+		const logcheckerLi = createLi('logchecker', logchecker);
+		element.appendChild(logcheckerLi);
+	}
+})();
