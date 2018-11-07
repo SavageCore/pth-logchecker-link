@@ -57,7 +57,7 @@
 				selectElem.options[i].selected = 'selected';
 			}
 		}
-		selectElem.onchange = function (e) {
+		selectElem.addEventListener('change', e => {
 			switch (e.target.value) {
 				case 'mainMenu':
 					GM.setValue('position', 'mainMenu');
@@ -75,7 +75,7 @@
 					GM.setValue('position', 'mainMenu');
 					updateLink(document.getElementById('menu').children[1]);
 			}
-		};
+		});
 	}
 
 	switch (position) {
