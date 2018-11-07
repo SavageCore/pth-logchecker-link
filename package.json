@@ -1,8 +1,25 @@
 {
-  "scripts": {
-    "test": "xo"
-  },
-  "devDependencies": {
-    "xo": "^0.17.0"
-  }
+	"name": "pth-logchecker-link",
+	"version": "0.2.8",
+	"description": "Add logchecker.php link to RED. Position configurable from User Edit page.",
+	"main": "index.js",
+	"scripts": {
+		"test": "xo"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/SavageCore/pth-logchecker-link.git"
+	},
+	"keywords": [
+		"userscript"
+	],
+	"author": "SavageCore",
+	"license": "Unlicense",
+	"bugs": {
+		"url": "https://github.com/SavageCore/pth-logchecker-link/issues"
+	},
+	"homepage": "https://github.com/SavageCore/pth-logchecker-link#readme",
+	"devDependencies": {
+		"xo": "^0.23.0"
+	}
 }
