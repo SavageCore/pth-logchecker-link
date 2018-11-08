@@ -20,6 +20,9 @@
 
 (async function () {
 	const position = await GM.getValue('position', 'userinfo');
+	const cssFixId = 'sc_C5DeMKuu';
+	cssFix(position);
+
 	if (window.location.href.match('user.php\\?action=edit&userid=')) {
 		const lastRow = document.getElementById('site_tooltips_tr');
 
@@ -58,6 +61,7 @@
 			}
 		}
 		selectElem.addEventListener('change', e => {
+			cssFix(e.target.value);
 			switch (e.target.value) {
 				case 'mainMenu':
 					GM.setValue('position', 'mainMenu');
@@ -123,5 +127,35 @@
 		const logchecker = createLink('Logchecker', 'logchecker.php');
 		const logcheckerLi = createLi('logchecker', logchecker);
 		element.appendChild(logcheckerLi);
+	}
+
+	function addCss(css) {
+		const node = document.createElement('style');
+		node.type = 'text/css';
+		node.appendChild(document.createTextNode(css));
+		node.id = cssFixId;
+		const heads = document.getElementsByTagName('head');
+		if (heads.length > 0) {
+			heads[0].appendChild(node);
+		} else {
+			// No head yet, stick it whereever
+			document.documentElement.appendChild(node);
+		}
+	}
+
+	function removeCss(id) {
+		const elem = document.getElementById(id);
+		if (elem) {
+			elem.parentElement.removeChild(elem);
+		}
+	}
+
+	function cssFix(position) {
+		if (position === 'mainMenu') {
+			const cssFixSel = '#nav_logchecker > a:nth-child(1) { background: none !important }';
+			addCss(cssFixSel);
+		} else {
+			removeCss(cssFixId);
+		}
 	}
 })();
