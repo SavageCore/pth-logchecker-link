@@ -4,7 +4,7 @@
 // @namespace      https://savagecore.eu
 // @description    Inserts a logchecker.php link in main menu.
 // @include        http*://*redacted.ch/*
-// @version        0.2.8
+// @version        3.0.0
 // @date           2016-11-29
 // @grant          GM_getValue
 // @grant          GM_setValue

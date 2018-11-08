@@ -1,6 +1,6 @@
 {
 	"name": "pth-logchecker-link",
-	"version": "0.2.8",
+	"version": "3.0.0",
 	"description": "Add logchecker.php link to RED. Position configurable from User Edit page.",
 	"main": "index.js",
 	"scripts": {
