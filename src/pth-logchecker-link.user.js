@@ -24,20 +24,20 @@
 	cssFix(position);
 
 	if (window.location.href.match('user.php\\?action=edit&userid=')) {
-		const lastRow = document.getElementById('site_tooltips_tr');
+		const lastRow = document.querySelector('#site_tooltips_tr');
 
 		const tr = document.createElement('tr');
 		tr.id = 'red_logchecker_tr';
 		const td = document.createElement('td');
 		td.className = 'label tooltip';
 		td.innerHTML = '<strong>Logchecker link location</strong>';
-		tr.appendChild(td);
+		tr.append(td);
 		const td2 = document.createElement('td');
-		tr.appendChild(td2);
+		tr.append(td2);
 		const select = document.createElement('select');
 		select.name = 'red_logchecker';
 		select.id = 'red_logchecker';
-		td2.appendChild(select);
+		td2.append(select);
 		const menuOptions = {
 			0: {value: 'mainMenu', innerText: 'Main Menu'},
 			1: {value: 'userinfo', innerText: 'User Info'},
@@ -48,64 +48,65 @@
 				const optionElement = document.createElement('option');
 				optionElement.value = menuOptions[key].value;
 				optionElement.innerText = menuOptions[key].innerText;
-				select.appendChild(optionElement);
+				select.append(optionElement);
 			}
 		}
 
 		lastRow.insertAdjacentElement('afterend', tr);
 
-		const selectElem = document.getElementById('red_logchecker');
+		const selectElem = document.querySelector('#red_logchecker');
 		for (let i = 0; i < selectElem.options.length; i++) {
 			if (selectElem.options[i].value === position) {
 				selectElem.options[i].selected = 'selected';
 			}
 		}
+
 		selectElem.addEventListener('change', e => {
 			cssFix(e.target.value);
 			switch (e.target.value) {
 				case 'mainMenu':
 					GM.setValue('position', 'mainMenu');
-					updateLink(document.getElementById('menu').children[1]);
+					updateLink(document.querySelector('#menu').children[1]);
 					break;
 				case 'userinfo':
 					GM.setValue('position', 'userinfo');
-					updateLink(document.getElementById('userinfo_minor'));
+					updateLink(document.querySelector('#userinfo_minor'));
 					break;
 				case 'userinfo_major':
 					GM.setValue('position', 'userinfo_major');
-					updateLink(document.getElementById('userinfo_major'));
+					updateLink(document.querySelector('#userinfo_major'));
 					break;
 				default:
 					GM.setValue('position', 'mainMenu');
-					updateLink(document.getElementById('menu').children[1]);
+					updateLink(document.querySelector('#menu').children[1]);
 			}
 		});
 	}
 
 	switch (position) {
 		case 'mainMenu':
-			appendLink(document.getElementById('menu').children[1]);
+			appendLink(document.querySelector('#menu').children[1]);
 			break;
 		case 'userinfo':
-			appendLink(document.getElementById('userinfo_minor'));
+			appendLink(document.querySelector('#userinfo_minor'));
 			break;
 		case 'userinfo_major':
-			appendLink(document.getElementById('userinfo_major'));
+			appendLink(document.querySelector('#userinfo_major'));
 			break;
 		default:
-			appendLink(document.getElementById('userinfo_minor'));
+			appendLink(document.querySelector('#userinfo_minor'));
 	}
 
 	function appendLink(menu) {
 		const logcheckerA = createLink('Logchecker', 'logchecker.php');
 		const logcheckerLi = createLi('logchecker', logcheckerA);
-		menu.appendChild(logcheckerLi);
+		menu.append(logcheckerLi);
 	}
 
 	function createLi(x, y) {
 		const li = document.createElement('li');
 		li.id = 'nav_' + x;
-		li.appendChild(y);
+		li.append(y);
 		return li;
 	}
 
@@ -118,7 +119,7 @@
 	}
 
 	function removeLi() {
-		const element = document.getElementById('nav_logchecker');
+		const element = document.querySelector('#nav_logchecker');
 		element.parentNode.removeChild(element);
 	}
 
@@ -126,25 +127,25 @@
 		removeLi();
 		const logchecker = createLink('Logchecker', 'logchecker.php');
 		const logcheckerLi = createLi('logchecker', logchecker);
-		element.appendChild(logcheckerLi);
+		element.append(logcheckerLi);
 	}
 
 	function addCss(css) {
 		const node = document.createElement('style');
 		node.type = 'text/css';
-		node.appendChild(document.createTextNode(css));
+		node.append(document.createTextNode(css));
 		node.id = cssFixId;
-		const heads = document.getElementsByTagName('head');
+		const heads = document.querySelectorAll('head');
 		if (heads.length > 0) {
-			heads[0].appendChild(node);
+			heads[0].append(node);
 		} else {
 			// No head yet, stick it whereever
-			document.documentElement.appendChild(node);
+			document.documentElement.append(node);
 		}
 	}
 
 	function removeCss(id) {
-		const elem = document.getElementById(id);
+		const elem = document.querySelector(`#${id}`);
 		if (elem) {
 			elem.parentElement.removeChild(elem);
 		}
