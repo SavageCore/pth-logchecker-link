@@ -20,6 +20,6 @@
 	},
 	"homepage": "https://github.com/SavageCore/pth-logchecker-link#readme",
 	"devDependencies": {
-		"xo": "^0.24.0"
+		"xo": "^0.45.0"
 	}
 }
